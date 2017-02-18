@@ -55,3 +55,79 @@ void del_lpoint(lpoint* l_pointer);
 //Declaration of tests in randmst_tests.c
 
 void test_one(int numpoints, int dimension, node* nodes[], time_t t);
+
+
+/* HEADER FOR HEAP.C */
+
+// represents nodes in heap
+typedef struct heapnode {
+	int vertex;
+	float val;
+} heapnode;
+
+// represents heap itself
+typedef struct heap {
+	heapnode* contents;
+	int length;
+	int max_length;
+} heap;
+
+// parent of i
+int parent(int i);
+
+// left child of i
+int left(int i);
+
+// right child of i
+int right(int i);
+
+// swaps items at locations a and b
+void exchange(heap* A, int a, int b);
+
+/* 
+ * MIN HEAPIFY
+ * Inputs: pointer to heap, heapnode at which to begin heapifying
+ * Outputs: none
+ *
+ * Description: looks at heapnode and its two children, then fixes 
+ * the trio such that the smallest is on top is then recursively 
+ * called on any displaced children
+ */
+void min_heapify(heap* A, int i);
+
+/* 
+ * INIT HEAP
+ * Inputs: size of heap
+ * Outputs: pointer to heap structure
+ *
+ * Description: makes and empty heap of given size
+ */
+heap* init_heap(int size);
+
+/* 
+ * MIN HEAP INSERT
+ * Inputs: pointer to heap, vertex to be inserted, value of vertex
+ * Outputs: none
+ *
+ * Description: inserts vertex into heap
+ */
+int min_heap_insert(heap* A, int vertex, float val);
+
+/* 
+ * HEAP EXTRACT MIN
+ * Inputs: pointer to heap
+ * Outputs: vertex
+ *
+ * Description: extracts min value object and maintains heap
+ * NOTE: returns -1 when heap is empty
+ */
+int heap_extract_min(heap* A);
+
+/* 
+ * DESTROY HEAP
+ * Inputs: pointer to heap
+ * Outputs: none
+ *
+ * Description: frees heap
+ */
+void destroy_heap(heap* A);

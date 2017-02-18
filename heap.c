@@ -1,25 +1,19 @@
-#include randmst.h
+#include "randmst.h"
 
 /*
  *
  * Implementation of a binary heap in C
  * HUID: 40940510
  *
+ *
+ * USAGE SUMMARY: 
+ * 
+ * heap* H = init_heap(CAPACITY_OF_HEAP);
+ * min_heap_insert(H, INT_OBJECT, WEIGHT_VALUE); // returns -1 if full
+ * heap_extract_min(H) // returns -1 if empty
+ * destroy_heap(H); 
+ *
  */
-
-/* STRUCTS */
-
-// represents nodes in heap
-typedef struct heapnode {
-	int vertex;
-	float val;
-} heapnode;
-
-// represents heap itself
-typedef struct heap {
-	heapnode* contents;
-	int length;
-} heap;
 
 /* HEAP NAVIGATION */
 
@@ -44,27 +38,10 @@ int right(int i) {
 
 // swaps items at locations a and b
 void exchange(heap* A, int a, int b) {
-	heapnode* contents = A->contents
+	heapnode* contents = A->contents;
 	heapnode temp = contents[a];
 	contents[a] = contents[b];
 	contents[b] = temp;
-}
-
-/* CORE FUNCTIONS */
-
-/* 
- * INIT HEAP
- * Inputs: size of heap
- * Outputs: pointer to heap structure
- *
- * Description: makes and empty heap of given size
- */
-
-heap* init_heap(int size) {
-	heap* h = malloc(sizeof(heap));
-	h->contents = malloc(sizeof(heapnode) * size);
-	h->length = 0;
-	return h;
 }
 
 /* 
@@ -88,15 +65,16 @@ void min_heapify(heap* A, int i){
 	int length = A->length;
 
 	// compares parent and left child
-	if (l <= length) && (contents[l]->val < contents[i]->val) {
-		int smallest = l;
+	int smallest;
+	if (l <= length && contents[l].val < contents[i].val) {
+		smallest = l;
 	}
 	else {
-		int smallest = i;
+		smallest = i;
 	}
 
 	// compares with right child
-	if (r <= length) && (contents[r]->val < contents[smallest]->val) {
+	if (r <= length && contents[r].val < contents[smallest].val) {
 		smallest = r;
 	}
 
@@ -107,6 +85,32 @@ void min_heapify(heap* A, int i){
 	}
 }
 
+/* USER FUNCTIONS */
+
+/* 
+ * INIT HEAP
+ * Inputs: size of heap
+ * Outputs: pointer to heap structure
+ *
+ * Description: makes and empty heap of given size
+ */
+
+heap* init_heap(int size) {
+	heap* h = malloc(sizeof(heap));
+	if (h == NULL) {
+		return NULL;
+	}
+
+	h->contents = malloc(sizeof(heapnode) * (size + 1));
+	if (h->contents == NULL) {
+		return NULL;
+	}
+
+	h->length = 0;
+	h->max_length = size;
+	return h;
+}
+
 /* 
  * MIN HEAP INSERT
  * Inputs: pointer to heap, vertex to be inserted, value of vertex
@@ -115,45 +119,55 @@ void min_heapify(heap* A, int i){
  * Description: inserts vertex into heap
  */
 
-void min_heap_insert(heap* A, int vertex, float val) {
-	
-	// build new heapnode
-	heapnode* new = malloc(sizeof(heapnode));
-	new->vertex = vertex;
-	new->val = val;
+int min_heap_insert(heap* A, int vertex, float val) {
 
-	// place node at bottom
+	// if heap is full
+	if (A->length == A->max_length) {
+		return -1;
+	}
+
+	
+	// place new node at bottom
 	(A->length)++;
 	heapnode* contents = A->contents;
-	contents[length] = new;
+	int length = A->length;
+	contents[length].vertex = vertex;
+	contents[length].val = val;
 
 	// bubble up
 	int tracker = length;
-	while (tracker > 1) && (contents[parent(tracker)] > contents[tracker]) {
+	while (
+			tracker > 1 && 
+			contents[parent(tracker)].val > contents[tracker].val
+			) 
+	{
 		exchange(A, tracker, parent(tracker));
 		tracker = parent(tracker);
 	}
+
+	return 0;
 
 }
 
 /* 
  * HEAP EXTRACT MIN
  * Inputs: pointer to heap
- * Outputs: pointer to vertex
+ * Outputs: vertex
  *
  * Description: extracts min value object and maintains heap
+ * NOTE: returns -1 when heap is empty
  */
 
-void heap_extract_min(heap* A) {
+int heap_extract_min(heap* A) {
 
 	// empty heap
 	if (A->length == 0) {
-		return NULL;
+		return -1;
 	}
 
 	// grab min node
 	heapnode* contents = A->contents;
-	int min = contents[1]->vertex;
+	int min = contents[1].vertex;
 
 	// fix heap
 	contents[1] = contents[A->length];
@@ -161,4 +175,55 @@ void heap_extract_min(heap* A) {
 	min_heapify(A, 1);
 
 	return min;
+}
+
+/* 
+ * DESTROY HEAP
+ * Inputs: pointer to heap
+ * Outputs: none
+ *
+ * Description: frees heap
+ */
+
+void destroy_heap(heap* A) {
+	free(A->contents);
+	free(A);
+}
+
+/* PRELIMINARY TESTING */
+
+// TODO: Move into test file
+
+int main(void) {
+
+	// test empty heap
+	heap* H = init_heap(10);
+	assert(heap_extract_min(H) == -1);
+	destroy_heap(H);
+	printf("successfully did stuff with empty heap\n");
+
+	// test basic functionality
+	H = init_heap(10);
+	min_heap_insert(H, 1, 2.1);
+	min_heap_insert(H, 3, 0);
+	min_heap_insert(H, 2, 2.0);
+	min_heap_insert(H, 4, -10);
+	assert(heap_extract_min(H) == 4);
+	assert(heap_extract_min(H) == 3);
+	assert(heap_extract_min(H) == 2);
+	assert(heap_extract_min(H) == 1);
+	assert(heap_extract_min(H) == -1); // test empty heap
+	destroy_heap(H);
+	printf("successfully sorted some stuff\n");
+
+	// test heap overflow
+	H = init_heap(2);
+	assert(min_heap_insert(H, 1, 2.1) == 0);
+	assert(min_heap_insert(H, 3, 0) == 0);
+	assert(min_heap_insert(H, 2, 2.0) == -1);
+	assert(heap_extract_min(H) == 3);
+	assert(heap_extract_min(H) == 1);
+	assert(heap_extract_min(H) == -1);
+	destroy_heap(H);
+	printf("successfully passed overflow error\n");
 }
