@@ -19,6 +19,7 @@ typedef struct heapnode {
 typedef struct heap {
 	heapnode* contents;
 	int length;
+	int max_length;
 } heap;
 
 /* HEAP NAVIGATION */
@@ -71,15 +72,16 @@ void min_heapify(heap* A, int i){
 	int length = A->length;
 
 	// compares parent and left child
-	if (l <= length) && (contents[l]->val < contents[i]->val) {
-		int smallest = l;
+	int smallest;
+	if (l <= length && contents[l].val < contents[i].val) {
+		smallest = l;
 	}
 	else {
-		int smallest = i;
+		smallest = i;
 	}
 
 	// compares with right child
-	if (r <= length) && (contents[r]->val < contents[smallest]->val) {
+	if (r <= length && contents[r].val < contents[smallest].val) {
 		smallest = r;
 	}
 
@@ -102,8 +104,17 @@ void min_heapify(heap* A, int i){
 
 heap* init_heap(int size) {
 	heap* h = malloc(sizeof(heap));
-	h->contents = malloc(sizeof(heapnode) * size);
+	if (h == NULL) {
+		return NULL;
+	}
+
+	h->contents = malloc(sizeof(heapnode) * (size + 1));
+	if (h->contents == NULL) {
+		return NULL;
+	}
+
 	h->length = 0;
+	h->max_length = size;
 	return h;
 }
 
@@ -115,45 +126,57 @@ heap* init_heap(int size) {
  * Description: inserts vertex into heap
  */
 
-void min_heap_insert(heap* A, int vertex, float val) {
-	
-	// build new heapnode
-	heapnode* new = malloc(sizeof(heapnode));
-	new->vertex = vertex;
-	new->val = val;
+// TODO: check if exceeding max capacity
 
-	// place node at bottom
+int min_heap_insert(heap* A, int vertex, float val) {
+
+	// if heap is full
+	if (A->length == A->max_length) {
+		return -1;
+	}
+
+	
+	// place new node at bottom
 	(A->length)++;
 	heapnode* contents = A->contents;
-	contents[length] = new;
+	int length = A->length;
+	contents[length].vertex = vertex;
+	contents[length].val = val;
 
 	// bubble up
 	int tracker = length;
-	while (tracker > 1) && (contents[parent(tracker)] > contents[tracker]) {
+	while (
+			tracker > 1 && 
+			contents[parent(tracker)].val > contents[tracker].val
+			) 
+	{
 		exchange(A, tracker, parent(tracker));
 		tracker = parent(tracker);
 	}
+
+	return 0;
 
 }
 
 /* 
  * HEAP EXTRACT MIN
  * Inputs: pointer to heap
- * Outputs: pointer to vertex
+ * Outputs: vertex
  *
  * Description: extracts min value object and maintains heap
+ * NOTE: returns -1 when heap is empty
  */
 
-void heap_extract_min(heap* A) {
+int heap_extract_min(heap* A) {
 
 	// empty heap
 	if (A->length == 0) {
-		return NULL;
+		return -1;
 	}
 
 	// grab min node
 	heapnode* contents = A->contents;
-	int min = contents[1]->vertex;
+	int min = contents[1].vertex;
 
 	// fix heap
 	contents[1] = contents[A->length];
@@ -172,16 +195,36 @@ void heap_extract_min(heap* A) {
  */
 
 void destroy_heap(heap* A) {
-	
+	free(A->contents);
+	free(A);
 }
 
-// /* PRELIMINARY TESTING */
+/* PRELIMINARY TESTING */
 
-// int main(void) {
-// 	// init heap of 5
-// 	heap* H = init_heap(5);
+int main(void) {
 
-// 	min_heap_insert(H, 1, 2);
+	// test basic functionality
+	heap* H = init_heap(10);
+	min_heap_insert(H, 1, 2.1);
+	min_heap_insert(H, 3, 0);
+	min_heap_insert(H, 2, 2.0);
+	min_heap_insert(H, 4, -10);
+	assert(heap_extract_min(H) == 4);
+	assert(heap_extract_min(H) == 3);
+	assert(heap_extract_min(H) == 2);
+	assert(heap_extract_min(H) == 1);
+	assert(heap_extract_min(H) == -1); // test empty heap
+	destroy_heap(H);
+	printf("successfully sorted some stuff\n");
 
-// 	printf("%i", heap_extract_min(H));
-// }
+	// test heap overflow
+	H = init_heap(2);
+	assert(min_heap_insert(H, 1, 2.1) == 0);
+	assert(min_heap_insert(H, 3, 0) == 0);
+	assert(min_heap_insert(H, 2, 2.0) == -1);
+	assert(heap_extract_min(H) == 3);
+	assert(heap_extract_min(H) == 1);
+	assert(heap_extract_min(H) == -1);
+	destroy_heap(H);
+	printf("successfully passed overflow error\n");
+}
