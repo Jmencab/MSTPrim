@@ -66,7 +66,7 @@ void del_lpoint(lpoint* l_pointer){
 }
 
 void array_initializer(node* nodes[], int numpoints){
-  for(int i = 0; i < numpoints - 1; i++){
+  for(int i = 0; i < numpoints; i++){
     node* point = new_node();
     assert(point != NULL);
     nodes[i] = point;
@@ -79,21 +79,21 @@ void build_graph(int numpoints, int dimensions, node* nodes[], time_t t){
 
    switch(dimensions){
      case 0:
-        for(int i = 0; i < numpoints - 1; i++){
+        for(int i = 0; i < numpoints; i++){
 
           nodes[i]->coord[0] = rand_range(t, 1);
         }
         break;
   	
      case 2:
-        for(int i = 0; i < numpoints - 1; i++){
+        for(int i = 0; i < numpoints; i++){
           nodes[i]->coord[0] = rand_range(t, 1);
           nodes[i]->coord[1] = rand_range(t, 1);
         }
         break;
     
      case 3:
-     	  for(int i = 0; i < numpoints - 1; i++){
+     	  for(int i = 0; i < numpoints; i++){
           nodes[i]->coord[0] = rand_range(t, 1);
           nodes[i]->coord[1] = rand_range(t, 1);
           nodes[i]->coord[2] = rand_range(t, 1);
@@ -101,7 +101,7 @@ void build_graph(int numpoints, int dimensions, node* nodes[], time_t t){
      	  break;
 
      	case 4:
-     	  for(int i = 0; i < numpoints - 1; i++){
+     	  for(int i = 0; i < numpoints; i++){
           nodes[i]->coord[0] = rand_range(t, 1);
           nodes[i]->coord[1] = rand_range(t, 1);
           nodes[i]->coord[2] = rand_range(t, 1);
@@ -132,9 +132,8 @@ int main(int argc, char** argv){
         printf("numpoints: %d\n", numpoints);
         printf("dimension: %d\n", dimension);
         test_one(numpoints, dimension, nodes, t);
-        printf("Is this being hit?\n");
     break;
   }
-  printf("Nothing is happening\n");
+
 EXIT_SUCCESS;
 }
