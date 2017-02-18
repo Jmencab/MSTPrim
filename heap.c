@@ -5,6 +5,14 @@
  * Implementation of a binary heap in C
  * HUID: 40940510
  *
+ *
+ * USAGE SUMMARY: 
+ * 
+ * heap* H = init_heap(CAPACITY_OF_HEAP);
+ * min_heap_insert(H, INT_OBJECT, WEIGHT_VALUE); // returns -1 if full
+ * heap_extract_min(H) // returns -1 if empty
+ * destroy_heap(H); 
+ *
  */
 
 /* STRUCTS */
