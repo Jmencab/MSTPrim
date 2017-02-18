@@ -201,8 +201,14 @@ void destroy_heap(heap* A) {
 
 int main(void) {
 
-	// test basic functionality
+	// test empty heap
 	heap* H = init_heap(10);
+	assert(heap_extract_min(H) == -1);
+	destroy_heap(H);
+	printf("successfully did stuff with empty heap\n");
+
+	// test basic functionality
+	H = init_heap(10);
 	min_heap_insert(H, 1, 2.1);
 	min_heap_insert(H, 3, 0);
 	min_heap_insert(H, 2, 2.0);
