@@ -1,4 +1,4 @@
-#include randmst.h
+#include "randmst.h"
 
 /*
  *
@@ -44,27 +44,10 @@ int right(int i) {
 
 // swaps items at locations a and b
 void exchange(heap* A, int a, int b) {
-	heapnode* contents = A->contents
+	heapnode* contents = A->contents;
 	heapnode temp = contents[a];
 	contents[a] = contents[b];
 	contents[b] = temp;
-}
-
-/* CORE FUNCTIONS */
-
-/* 
- * INIT HEAP
- * Inputs: size of heap
- * Outputs: pointer to heap structure
- *
- * Description: makes and empty heap of given size
- */
-
-heap* init_heap(int size) {
-	heap* h = malloc(sizeof(heap));
-	h->contents = malloc(sizeof(heapnode) * size);
-	h->length = 0;
-	return h;
 }
 
 /* 
@@ -105,6 +88,23 @@ void min_heapify(heap* A, int i){
 		exchange(A, i, smallest);
 		min_heapify(A, smallest);
 	}
+}
+
+/* USER FUNCTIONS */
+
+/* 
+ * INIT HEAP
+ * Inputs: size of heap
+ * Outputs: pointer to heap structure
+ *
+ * Description: makes and empty heap of given size
+ */
+
+heap* init_heap(int size) {
+	heap* h = malloc(sizeof(heap));
+	h->contents = malloc(sizeof(heapnode) * size);
+	h->length = 0;
+	return h;
 }
 
 /* 
@@ -162,3 +162,26 @@ void heap_extract_min(heap* A) {
 
 	return min;
 }
+
+/* 
+ * DESTROY HEAP
+ * Inputs: pointer to heap
+ * Outputs: none
+ *
+ * Description: frees heap
+ */
+
+void destroy_heap(heap* A) {
+	
+}
+
+// /* PRELIMINARY TESTING */
+
+// int main(void) {
+// 	// init heap of 5
+// 	heap* H = init_heap(5);
+
+// 	min_heap_insert(H, 1, 2);
+
+// 	printf("%i", heap_extract_min(H));
+// }
