@@ -15,21 +15,6 @@
  *
  */
 
-/* STRUCTS */
-
-// represents nodes in heap
-typedef struct heapnode {
-	int vertex;
-	float val;
-} heapnode;
-
-// represents heap itself
-typedef struct heap {
-	heapnode* contents;
-	int length;
-	int max_length;
-} heap;
-
 /* HEAP NAVIGATION */
 
 // TODO: Implement these as bitwise operators
@@ -206,6 +191,8 @@ void destroy_heap(heap* A) {
 }
 
 /* PRELIMINARY TESTING */
+
+// TODO: Move into test file
 
 int main(void) {
 
