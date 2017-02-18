@@ -126,8 +126,6 @@ heap* init_heap(int size) {
  * Description: inserts vertex into heap
  */
 
-// TODO: check if exceeding max capacity
-
 int min_heap_insert(heap* A, int vertex, float val) {
 
 	// if heap is full
