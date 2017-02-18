@@ -11,7 +11,7 @@
 
 // represents nodes in heap
 typedef struct heapnode {
-	lpoint** vertex;
+	int vertex;
 	float val;
 } heapnode;
 
@@ -45,16 +45,16 @@ int right(int i) {
 // swaps items at locations a and b
 void exchange(heap* A, int a, int b) {
 	heapnode* contents = A->contents
-	int temp = contents[a]->val;
-	contents[a]->val = contents[b]->vals;
-	contents[b]->val = temp;
+	heapnode temp = contents[a];
+	contents[a] = contents[b];
+	contents[b] = temp;
 }
 
 /* CORE FUNCTIONS */
 
 /* 
  * INIT HEAP
- * Inputs: max size of heap
+ * Inputs: size of heap
  * Outputs: pointer to heap structure
  *
  * Description: makes and empty heap of given size
@@ -62,18 +62,19 @@ void exchange(heap* A, int a, int b) {
 
 heap* init_heap(int size) {
 	heap* h = malloc(sizeof(heap));
-	h->contents = malloc(sizeof(heapnode*) * size);
+	h->contents = malloc(sizeof(heapnode) * size);
 	h->length = 0;
 	return h;
 }
 
 /* 
  * MIN HEAPIFY
- * Inputs: pointer to heap, vertex at which to begin heapifying
+ * Inputs: pointer to heap, heapnode at which to begin heapifying
  * Outputs: none
  *
- * Description:looks at node and its two children, then fixes the trio such that the smallest
- * is on top is then recursively called on any displaced children
+ * Description: looks at heapnode and its two children, then fixes 
+ * the trio such that the smallest is on top is then recursively 
+ * called on any displaced children
  */
 
 void min_heapify(heap* A, int i){
@@ -106,29 +107,58 @@ void min_heapify(heap* A, int i){
 	}
 }
 
-
 /* 
  * MIN HEAP INSERT
- * Inputs: pointer to heap, vertex at which to begin heapifying
+ * Inputs: pointer to heap, vertex to be inserted, value of vertex
  * Outputs: none
  *
- * Description:looks at node and its two children, then fixes the trio such that the smallest
- * is on top is then recursively called on any displaced children
+ * Description: inserts vertex into heap
  */
 
-void min_heap_insert() {
+void min_heap_insert(heap* A, int vertex, float val) {
+	
+	// build new heapnode
+	heapnode* new = malloc(sizeof(heapnode));
+	new->vertex = vertex;
+	new->val = val;
+
+	// place node at bottom
+	(A->length)++;
+	heapnode* contents = A->contents;
+	contents[length] = new;
+
+	// bubble up
+	int tracker = length;
+	while (tracker > 1) && (contents[parent(tracker)] > contents[tracker]) {
+		exchange(A, tracker, parent(tracker));
+		tracker = parent(tracker);
+	}
 
 }
 
 /* 
- * MIN HEAP INSERT
- * Inputs: pointer to heap, vertex at which to begin heapifying
- * Outputs: none
+ * HEAP EXTRACT MIN
+ * Inputs: pointer to heap
+ * Outputs: pointer to vertex
  *
- * Description:looks at node and its two children, then fixes the trio such that the smallest
- * is on top is then recursively called on any displaced children
+ * Description: extracts min value object and maintains heap
  */
- 
-void heap_extract_min() {
 
+void heap_extract_min(heap* A) {
+
+	// empty heap
+	if (A->length == 0) {
+		return NULL;
+	}
+
+	// grab min node
+	heapnode* contents = A->contents;
+	int min = contents[1]->vertex;
+
+	// fix heap
+	contents[1] = contents[A->length];
+	(A->length)--;
+	min_heapify(A, 1);
+
+	return min;
 }
