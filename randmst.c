@@ -16,7 +16,6 @@ with the coordinates associated with each one*/
 
 
 float rand_range(time_t t, float limit){
-  srand((unsigned) time(&t));
   float divisor = RAND_MAX/(limit+1);
   float retval;
       
@@ -122,6 +121,7 @@ int main(int argc, char** argv){
   int dimension = atoi(argv[4]);
   node* nodes[numpoints];
   time_t t;
+  srand((unsigned) time(&t));
 //First test: just seeing if the values given as coordinates worked
   switch(run_type){
     case 0:
