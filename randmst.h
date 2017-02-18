@@ -3,30 +3,35 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+/***********************************************************
+***********************************************************/
+//Declarations for things in randmst.c
+
+// Used to represent unpruned nodes any graph is adjacent to
+typedef struct lpoint{
+	struct lpoint* next_lpoint;
+	float dist;
+} lpoint;
+
 //Used to represent each "point" on the graph
 typedef struct node{ 
     float coord[4];
     lpoint* first_l;
 } node;
 
-// Used to represent unpruned nodes any graph is adjacent to
-typedef struct lpoint{
-	node* next_node;
-	float dist;
-} lpoint;
-
 /* void build_graph(int numpoints, int dimension)
 Sets the coordinates for numpoints nodes in a nodes array
  for a given dimension*/
-void build_graph(int numpoints, int dimensions, node* nodes[]);
+void build_graph(int numpoints, int dimensions, node* nodes[], time_t t);
 
-/* float rand_range(float min, float max)
+/* float rand_range(time_t t)
 Used to return a random number between 0 and 1*/
-float rand_range(float min, float max);
+float rand_range(time_t t, float limit);
 
-/* void array_initializer(node* nodes[])
-Takes the node array and initializes all to NULL*/
-void array_initializer(node* nodes[]);
+/* void array_initializer(node* nodes[], int numpoints)
+Takes the node array and initializes all entries to be 
+pointers to nodes with initialized coordinates*/
+void array_initializer(node* nodes[], int numpoints);
 
 /* node* new_node(void)
 Initializes nodes and returns pointer to it*/
@@ -44,7 +49,8 @@ lpoint* new_lpoint(void);
 Delete and free the given l_pointer*/
 void del_lpoint(lpoint* l_pointer);
 
-/* coid array_initializer(node* nodes[])
-sets every entry in node* nodes to be a node*/
-void array_initializer(node* nodes[]);
+/**************************************
+***************************************/
+//Declaration of tests in randmst_tests.c
 
+void test_one(int numpoints, int dimension, node* nodes[], time_t t);
