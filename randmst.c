@@ -37,6 +37,8 @@ node* new_node(void){
     node_ptr->coord[1] = 0;
     node_ptr->coord[2] = 0;
     node_ptr->coord[3] = 0;
+    //initialize the first_l
+    node_ptr->first_l = NULL;
     return node_ptr;
 }
 
@@ -55,7 +57,7 @@ lpoint* new_lpoint(void){
   //initialize distance
   l_pointer-> dist = 0;
   l_pointer->next_lpoint = NULL;
-  l_point->point = -1;
+  l_pointer->vertex = -1;
   return l_pointer;
 }
 
@@ -105,51 +107,44 @@ void build_graph(int numpoints, int dimensions, node* nodes[], time_t t){
    }
 }
 
-/*TODO TWO: Build adjacency lists by pruning distances greater than radius*/
-void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
+/*TODO TWO: Build adjacency lists by pruning distances greater than 
+radius (will add radius argument later to euclid and build_list functions)*/
 
+void list_helper(float distance, int i, int j, node* nodes[], lpoint* head){
+  if(distance <= PROB){
+    if(nodes[i]->first_l){
+      lpoint* next_edge = new_lpoint();
+      assert(next_edge);
+      next_edge-> dist = distance;
+      next_edge->vertex = j;
+      if(head)
+        head->next_lpoint = next_edge;
+      head = next_edge;
+    }
+    if(!nodes[i]->first_l){
+      lpoint* first_edge = new_lpoint();
+      assert(first_edge != NULL);
+      first_edge-> dist = distance;
+      first_edge-> vertex = j;
+      nodes[i]-> first_l = first_edge;
+      head = first_edge;
+    }
+  }
+}
+
+//computes euclidean distance and assigns edge weights accordingly
+void euclid(int numpoints, int dimensions, node* nodes[]){
   switch(dimensions){
-    case 0:
-      //need to generate edge weights here individually
-      for(int i = 0; i < numpoints; i++){
-        lpoint* head = NULL;
-
-          for(int j = i; j < numpoints; j++){
-
-            if(nodes[i]->first_l){
-              float wedge = rand_range(t, 1);
-              if(wedge <= PROB){
-                lpoint* next_edge = new_lpoint();
-                assert(next_edge);
-                next_edge->dist = wedge;
-                next_edge->point = j;
-                head->next_lpoint = next_edge;
-                head = next_edge;
-              }
-            }
-
-            if(!nodes[i]->first_l){
-              float wedge = rand_range(t, 1);
-              if(wedge <= PROB){
-                lpoint* first_edge = new_lpoint();
-                assert(first_edge);
-                first_edge->dist = wedge;
-                first_edge->point = j;
-                nodes[i]->first_l = first_edge;
-                head = first_edge;
-              }
-            }
-          }
-      }
-    break;
-
     //for all other cases, need to calculate edge weights based on coordinates
     case 2:
       for(int i = 0; i < numpoints; i++){
         lpoint* head = NULL;
         float x_1 = nodes[i]-> coord[0];
         float y_1 = nodes[i]-> coord[1];
-        for(int j = i + 1; j < numpoints; j++){
+        for(int j = 0; j < numpoints; j++){
+          if(j == i){
+            continue;
+          }
           float x_2 = nodes[j]->coord[0];
           float y_2 = nodes[j]->coord[1];
           double x_diff = (double) (x_2 - x_1);
@@ -157,22 +152,8 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
           double x_diff_square = pow(x_diff, 2);
           double y_diff_square = pow(y_diff, 2);
           float distance = (float) sqrt((x_diff_square + y_diff_square));
-          if(distance <= PROB){
-            if(nodes[i]->first_l){
-              lpoint* next_edge = new_lpoint();
-              assert(next_edge);
-              next_edge-> dist = distance;
-              head->next_lpoint = next_edge;
-              head = next_edge;
-            }
-            if(!nodes[i]->first_l){
-              lpoint* first_edge = new_lpoint();
-              assert(first_edge);
-              first_edge-> dist = distance;
-              nodes[i]-> first_l = first_edge;
-              head = first_edge;
-            }
-          }
+          //use info to add to adjacency list
+          list_helper(distance, i, j, nodes, head);
         }
       }
     break;
@@ -183,7 +164,10 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
-          for(int j = i + 1; j < numpoints; j++){
+          for(int j = 0; j < numpoints; j++){
+            if(j == i){
+              continue;
+            }
             float x_2 = nodes[j]-> coord[0];
             float y_2 = nodes[j]-> coord[1];
             float z_2 = nodes[j]-> coord[2];
@@ -195,22 +179,8 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
             double z_diff_square = pow(z_diff, 2);
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + z_diff_square));
-            if(distance <= PROB){
-              if(nodes[i]->first_l){
-                lpoint* next_edge = new_lpoint();
-                assert(next_edge);
-                next_edge-> dist = distance;
-                head->next_lpoint = next_edge;
-                head = next_edge;
-              }
-              if(!nodes[i]->first_l){
-                lpoint* first_edge = new_lpoint();
-                assert(first_edge);
-                first_edge-> dist = distance;
-                nodes[i]-> first_l = first_edge;
-                head = first_edge;
-              }
-            }
+            //use info to add to adjacency list
+            list_helper(distance, i, j, nodes, head);
           }
         }
       break;
@@ -222,7 +192,10 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
           float a_1 = nodes[i]-> coord[3];
-          for(int j = i + 1; j < numpoints; j++){
+          for(int j = 0; j < numpoints; j++){
+            if(j == i){
+              continue;
+            }
             float x_2 = nodes[j]-> coord[0];
             float y_2 = nodes[j]-> coord[1];
             float z_2 = nodes[j]-> coord[2];
@@ -238,26 +211,54 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + 
               z_diff_square + a_diff_square));
-            if(distance <= PROB){
-              if(nodes[i]->first_l){
-                lpoint* next_edge = new_lpoint();
-                assert(next_edge);
-                next_edge-> dist = distance;
-                head->next_lpoint = next_edge;
-                head = next_edge;
-              }
-              if(!nodes[i]->first_l){
-                lpoint* first_edge = new_lpoint();
-                assert(first_edge);
-                first_edge-> dist = distance;
-                nodes[i]-> first_l = first_edge;
-                head = first_edge;
-              }
-            }
+            //use info to add to adjacency list
+            list_helper(distance, i, j, nodes, head);
           }
         }
       break;
+
+  }
+}
+void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
+  if(dimensions == 0){
+  //need to generate edge weights here individually
+    for(int i = 0; i < numpoints; i++){
+      lpoint* head = NULL;
+
+        for(int j = 0; j < numpoints; j++){
+          if(j == i){
+            continue;
+          }
+          if(nodes[i]->first_l){
+            float wedge = rand_range(t, 1);
+            if(wedge <= PROB){
+              lpoint* next_edge = new_lpoint();
+              assert(next_edge);
+              next_edge->dist = wedge;
+              next_edge->vertex = j;
+              head->next_lpoint = next_edge;
+              head = next_edge;
+            }
+          }
+
+          if(!nodes[i]->first_l){
+            float wedge = rand_range(t, 1);
+            if(wedge <= PROB){
+              lpoint* first_edge = new_lpoint();
+              assert(first_edge);
+              first_edge->dist = wedge;
+              first_edge->vertex = j;
+              nodes[i]->first_l = first_edge;
+              head = first_edge;
+            }
+          }
+        }
     }
+  }
+  else{
+    //build adjacency list with euclidean distances
+    euclid(numpoints, dimensions, nodes);
+  }
 }
 
 int main(int argc, char** argv){
@@ -273,15 +274,44 @@ int main(int argc, char** argv){
 //First test: just seeing if the values given as coordinates worked
   switch(run_type){
     case 0:
-    printf("Not yet implemented\n");
+      build_graph(numpoints, dimension, nodes, t);
+      printf("Built graph alright\n");
+      list_builder(numpoints, dimension, nodes, t);
+      printf("Built List alright\n");
+      for(int i = 0; i < numpoints; i++){
+        lpoint* head = NULL;
+        if(nodes[i]->first_l){
+          head = nodes[i]->first_l;
+          printf("Assigned head to first list for vertex %d\n", i);
+          while(head->next_lpoint){
+            head = head->next_lpoint;
+            del_lpoint(head);
+          }
+          printf("Deleted all of the vertexes in the list except first\n");
+          del_lpoint(nodes[i]->first_l);
+          del_node(nodes[i]);
+          printf("Deleted all the vertexes and the node itself for vertex %d\n", i);
+        }
+        else{
+          del_node(nodes[i]);
+          printf("No vertexes in adjacency list for vertex %d\n", i);
+        }
+      }
     break;
 
     case 1:
-        printf("numpoints: %d\n", numpoints);
-        printf("dimension: %d\n", dimension);
-        test_one(numpoints, dimension, nodes, t);
+      printf("numpoints: %d\n", numpoints);
+      printf("dimension: %d\n", dimension);
+      test_one(numpoints, dimension, nodes, t);
+    break;
+
+    case 2: 
+      test_two(numpoints, dimension, nodes, t);
+    break;
+
+    case 3:
+      test_three();
     break;
   }
-
 EXIT_SUCCESS;
 }

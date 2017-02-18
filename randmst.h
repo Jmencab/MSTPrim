@@ -11,7 +11,8 @@
 // Used to represent unpruned nodes any graph is adjacent to
 typedef struct lpoint{
 	struct lpoint* next_lpoint;
-	float dist;
+	float dist; 
+	int vertex; //to what vertex the edge goes to
 } lpoint;
 
 //Used to represent each "point" on the graph
@@ -24,6 +25,16 @@ typedef struct node{
 Sets the coordinates for numpoints nodes in a nodes array
  for a given dimension*/
 void build_graph(int numpoints, int dimensions, node* nodes[], time_t t);
+
+/*void list_builder(int numpoints, int dimensions, node* nodes[], time_t t)
+Generates the andjacency list and edgeweights for the graph */
+void list_builder(int numpoints, int dimensions, node* nodes[], time_t t);
+
+//starts and updates the linked list in the adjacency list
+void list_helper(float distance, int i, int j, node* nodes[], lpoint* head);
+
+//computes euclidean distance and assigns edge weights accordingly
+void euclid(int numpoints, int dimensions, node* nodes[]);
 
 /* float rand_range(time_t t)
 Used to return a random number between 0 and 1*/
@@ -53,9 +64,12 @@ void del_lpoint(lpoint* l_pointer);
 /**************************************
 ***************************************/
 //Declaration of tests in randmst_tests.c
-
+//test vertex generator (build_graph)
 void test_one(int numpoints, int dimension, node* nodes[], time_t t);
-
+//test adjacency list builder(list_builder)
+void test_two(int numpoints, int dimension, node* nodes[], time_t t);
+//Test heap operations
+void test_three(void);
 
 /* HEADER FOR HEAP.C */
 
