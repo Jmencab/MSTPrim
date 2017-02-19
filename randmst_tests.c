@@ -40,13 +40,15 @@ void test_two(int numpoints, int dimension, node* nodes[], time_t t){
 				head = head->next_lpoint;
 				printf("Distance from vertex %d to vertex %d is: %f\n", i, 
 					head->vertex, head->dist);
-				del_lpoint(temp);
+				if(temp)
+					del_lpoint(temp);
 			}
-			del_lpoint(nodes[i]->first_l);
-            del_node(nodes[i]);
+			if(nodes[i])
+            	del_node(nodes[i]);
 		}
 		else{
-			del_node(nodes[i]);
+			if(nodes[i])
+				del_node(nodes[i]);
 		}
 	}
 }

@@ -30,9 +30,6 @@ void build_graph(int numpoints, int dimensions, node* nodes[], time_t t);
 Generates the andjacency list and edgeweights for the graph */
 void list_builder(int numpoints, int dimensions, node* nodes[], time_t t);
 
-//starts and updates the linked list in the adjacency list
-void list_helper(float distance, int i, int j, node* nodes[], lpoint* head);
-
 //computes euclidean distance and assigns edge weights accordingly
 void euclid(int numpoints, int dimensions, node* nodes[]);
 

@@ -1,5 +1,5 @@
 #include "randmst.h"
-#define PROB 0.0110485435
+#define PROB .01
 /* Want to be able to run ./randmst 0 numpoints numtrials dimension
 We ultimately want an adjacency list that gives the distance to another 
 node from one node along relevant edges. */
@@ -45,7 +45,7 @@ node* new_node(void){
 void del_node(node* node_ptr){
     // Can safely assume vector is NULL or fully built.
     if(node_ptr){
-      free (node_ptr);
+      free(node_ptr);
     }
 }
 
@@ -110,27 +110,6 @@ void build_graph(int numpoints, int dimensions, node* nodes[], time_t t){
 /*TODO TWO: Build adjacency lists by pruning distances greater than 
 radius (will add radius argument later to euclid and build_list functions)*/
 
-void list_helper(float distance, int i, int j, node* nodes[], lpoint* head){
-  if(distance <= PROB){
-    if(nodes[i]->first_l){
-      lpoint* next_edge = new_lpoint();
-      assert(next_edge);
-      next_edge-> dist = distance;
-      next_edge->vertex = j;
-      if(head)
-        head->next_lpoint = next_edge;
-      head = next_edge;
-    }
-    if(!nodes[i]->first_l){
-      lpoint* first_edge = new_lpoint();
-      assert(first_edge != NULL);
-      first_edge-> dist = distance;
-      first_edge-> vertex = j;
-      nodes[i]-> first_l = first_edge;
-      head = first_edge;
-    }
-  }
-}
 
 //computes euclidean distance and assigns edge weights accordingly
 void euclid(int numpoints, int dimensions, node* nodes[]){
@@ -139,8 +118,10 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
     case 2:
       for(int i = 0; i < numpoints; i++){
         lpoint* head = NULL;
+
         float x_1 = nodes[i]-> coord[0];
         float y_1 = nodes[i]-> coord[1];
+
         for(int j = 0; j < numpoints; j++){
           if(j == i){
             continue;
@@ -153,7 +134,25 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
           double y_diff_square = pow(y_diff, 2);
           float distance = (float) sqrt((x_diff_square + y_diff_square));
           //use info to add to adjacency list
-          list_helper(distance, i, j, nodes, head);
+            if(distance <= PROB){
+              if(nodes[i]->first_l){
+                lpoint* next_edge = new_lpoint();
+                assert(next_edge);
+                next_edge-> dist = distance;
+                next_edge->vertex = j;
+                if(head)
+                  head->next_lpoint = next_edge;
+                head = next_edge;
+              }
+              if(!nodes[i]->first_l){
+                lpoint* first_edge = new_lpoint();
+                assert(first_edge);
+                first_edge-> dist = distance;
+                first_edge-> vertex = j;
+                nodes[i]-> first_l = first_edge;
+                head = first_edge;
+              }
+          }
         }
       }
     break;
@@ -164,6 +163,7 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
+
           for(int j = 0; j < numpoints; j++){
             if(j == i){
               continue;
@@ -180,9 +180,28 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + z_diff_square));
             //use info to add to adjacency list
-            list_helper(distance, i, j, nodes, head);
+              if(distance <= PROB){
+                if(nodes[i]->first_l){
+                  lpoint* next_edge = new_lpoint();
+                  assert(next_edge);
+                  next_edge-> dist = distance;
+                  next_edge->vertex = j;
+                  if(head)
+                    head->next_lpoint = next_edge;
+                  head = next_edge;
+                }
+                if(!nodes[i]->first_l){
+                  lpoint* first_edge = new_lpoint();
+                  assert(first_edge);
+                  first_edge-> dist = distance;
+                  first_edge-> vertex = j;
+                  nodes[i]-> first_l = first_edge;
+                  head = first_edge;
+                }
+              }
+            }
           }
-        }
+    
       break;
 
       case 4: 
@@ -192,6 +211,9 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
           float a_1 = nodes[i]-> coord[3];
+          //calculate euclidean distances and then 
+          //take care of linked list
+
           for(int j = 0; j < numpoints; j++){
             if(j == i){
               continue;
@@ -212,13 +234,33 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
               (float) sqrt((x_diff_square + y_diff_square + 
               z_diff_square + a_diff_square));
             //use info to add to adjacency list
-            list_helper(distance, i, j, nodes, head);
+              if(distance <= PROB){
+                if(nodes[i]->first_l){
+                  lpoint* next_edge = new_lpoint();
+                  assert(next_edge);
+                  next_edge-> dist = distance;
+                  next_edge->vertex = j;
+                  if(head)
+                    head->next_lpoint = next_edge;
+                    head = next_edge;
+                  }
+                if(!nodes[i]->first_l){
+                  lpoint* first_edge = new_lpoint();
+                  assert(first_edge);
+                  first_edge-> dist = distance;
+                  first_edge-> vertex = j;
+                  nodes[i]-> first_l = first_edge;
+                  head = first_edge;
+                }
+              }
+
           }
         }
       break;
 
   }
 }
+
 void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
   if(dimensions == 0){
   //need to generate edge weights here individually
@@ -236,7 +278,8 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
               assert(next_edge);
               next_edge->dist = wedge;
               next_edge->vertex = j;
-              head->next_lpoint = next_edge;
+              if(head)
+                head->next_lpoint = next_edge;
               head = next_edge;
             }
           }
@@ -282,12 +325,10 @@ int main(int argc, char** argv){
         lpoint* head = NULL;
         if(nodes[i]->first_l){
           head = nodes[i]->first_l;
-          printf("Assigned head to first list for vertex %d\n", i);
           while(head->next_lpoint){
             head = head->next_lpoint;
             del_lpoint(head);
           }
-          printf("Deleted all of the vertexes in the list except first\n");
           del_lpoint(nodes[i]->first_l);
           del_node(nodes[i]);
           printf("Deleted all the vertexes and the node itself for vertex %d\n", i);
