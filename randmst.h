@@ -11,6 +11,7 @@
 // Used to represent unpruned nodes any graph is adjacent to
 typedef struct lpoint{
 	struct lpoint* next_lpoint;
+	struct lpoint* back_lpoint;
 	float dist; 
 	int vertex; //to what vertex the edge goes to
 } lpoint;

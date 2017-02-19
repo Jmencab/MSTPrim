@@ -57,6 +57,7 @@ lpoint* new_lpoint(void){
   //initialize distance
   l_pointer-> dist = 0;
   l_pointer->next_lpoint = NULL;
+  l_pointer->back_lpoint = NULL;
   l_pointer->vertex = -1;
   return l_pointer;
 }
@@ -140,8 +141,10 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                 assert(next_edge);
                 next_edge-> dist = distance;
                 next_edge->vertex = j;
-                if(head)
+                next_edge->back_lpoint = head;
+                if(head){
                   head->next_lpoint = next_edge;
+                }
                 head = next_edge;
               }
               if(!nodes[i]->first_l){
@@ -186,8 +189,10 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                   assert(next_edge);
                   next_edge-> dist = distance;
                   next_edge->vertex = j;
-                  if(head)
+                  next_edge->back_lpoint = head;
+                  if(head){
                     head->next_lpoint = next_edge;
+                  }
                   head = next_edge;
                 }
                 if(!nodes[i]->first_l){
@@ -240,8 +245,10 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                   assert(next_edge);
                   next_edge-> dist = distance;
                   next_edge->vertex = j;
-                  if(head)
+                  next_edge->back_lpoint = head;
+                  if(head){
                     head->next_lpoint = next_edge;
+                  }
                     head = next_edge;
                   }
                 if(!nodes[i]->first_l){
@@ -278,8 +285,10 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
               assert(next_edge);
               next_edge->dist = wedge;
               next_edge->vertex = j;
-              if(head)
+              next_edge->back_lpoint = head;
+              if(head){
                 head->next_lpoint = next_edge;
+              }
               head = next_edge;
             }
           }
@@ -324,20 +333,29 @@ int main(int argc, char** argv){
       for(int i = 0; i < numpoints; i++){
         lpoint* head = NULL;
         if(nodes[i]->first_l){
-          head = nodes[i]->first_l;
-          while(head->next_lpoint){
-            head = head->next_lpoint;
-            del_lpoint(head);
+          if(nodes[i]->first_l->next_lpoint){
+            head = nodes[i]->first_l->next_lpoint;
           }
-          del_lpoint(nodes[i]->first_l);
+          printf("Edge from V_%d to V_%d. Dist: %f\n", i, nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
+          while(head){
+            printf("Edge from V_%d to V_%d. Dist: %f\n", i, head->vertex, head->dist);
+            head = head->next_lpoint;
+          }
+          head = nodes[i]->first_l;
+          while(head){
+            lpoint* temp = head;
+            head = head->next_lpoint;
+            del_lpoint(temp);
+          }
           del_node(nodes[i]);
           printf("Deleted all the vertexes and the node itself for vertex %d\n", i);
         }
         else{
           del_node(nodes[i]);
-          printf("No vertexes in adjacency list for vertex %d\n", i);
+        printf("No vertexes in adjacency list for vertex %d\n", i);
         }
       }
+      printf("Alls well that ends well\n");
     break;
 
     case 1:

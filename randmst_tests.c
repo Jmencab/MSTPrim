@@ -32,24 +32,33 @@ void test_two(int numpoints, int dimension, node* nodes[], time_t t){
 	for(int i = 0; i < numpoints; i++){
 		lpoint* head = NULL;
 		if(nodes[i]->first_l){
-			head = nodes[i]-> first_l;
 			printf("Distance from vertex %d to vertex %d is: %f\n", i, 
 				nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
-			while(head->next_lpoint){
-				lpoint* temp = head;
-				head = head->next_lpoint;
+			if(nodes[i]->first_l->next_lpoint){
+				head = nodes[i]-> first_l-> next_lpoint;
+			}
+			while(head){
 				printf("Distance from vertex %d to vertex %d is: %f\n", i, 
 					head->vertex, head->dist);
-				if(temp)
-					del_lpoint(temp);
+
+				head = head->next_lpoint;
 			}
-			if(nodes[i])
+			head = nodes[i]->first_l;
+			while(head){
+				lpoint* temp = head;
+				head = head->next_lpoint;
+				del_lpoint(temp);
+			}
+			if(nodes[i]){
             	del_node(nodes[i]);
+			}
 		}
 		else{
-			if(nodes[i])
+			if(nodes[i]){
 				del_node(nodes[i]);
+			}
 		}
+	
 	}
 }
 
