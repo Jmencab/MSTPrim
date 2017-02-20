@@ -18,7 +18,7 @@ int* prim(node* G, int V, int s) {
 	heap* H = init_heap(V);
 	min_heap_insert(H, s, 0);
 	for (int i = 0; i < V; i++) {
-		dist[i] = 2; // represents infinity?
+		dist[i] = 999; // represents infinity?
 		prev[i] = -1; 
 	}
 	dist[s] = 0;
