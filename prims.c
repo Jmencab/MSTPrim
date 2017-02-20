@@ -9,25 +9,31 @@
  *
  */
 
-
-// TODO: include starting point s?
-int* prim(node* G, int V, int s) {
-	int dists[V];
-	int prev[V];
-	// TODO: empty set
-	heap* H = init_heap(V);
-	min_heap_insert(H, s, 0);
-	for (int i = 0; i < V; i++) {
-		dist[i] = 999; // represents infinity?
-		prev[i] = -1; 
+int* prim(node* G, int size, int root) {
+	int dists[size];
+	int prev[size];
+	int set[size];
+	heap* H = init_heap(size);
+	min_heap_insert(H, root, 0);
+	for (int i = 0; i < size; i++) {
+		dist[i] = 999; // represents infinity
+		prev[i] = -1; // represents nil
+		set[i] = 0; // represents not in S
 	}
-	dist[s] = 0;
+	dist[root] = 0;
 	int v;
-	while (v = heap_extract_min(H), i != -1) {
-		// TODO: add v to set
-		// rest of code here
-		// min_heap_insert(H, INT_OBJECT, WEIGHT_VALUE); // returns -1 if full
+	while (v = heap_extract_min(H), v != -1) {
+		set[v] = 1;
+		for (int i = 0; i < size; i++) {
+			// TODO: FOR EACH EDGE IN G[i]
+				if (set[w] == 0) {
+					if (dist[w] > LENGTHOFEDGE) {
+						dist[w] = LENGTHOFEDGE;
+						prev[w] = v;
+						min_heap_insert(H, w, dist[w]) // TODO: check for overflow (returns -1)
+					}
+				}
+		}
 	}
-	
 	destroy_heap(H); 
 }
