@@ -63,7 +63,7 @@ void test_two(int numpoints, int dimension, node* nodes[], time_t t){
 }
 
 void test_three(void){
-		// test empty heap
+	// test empty heap
 	heap* H = init_heap(10);
 	assert(heap_extract_min(H) == -1);
 	destroy_heap(H);
