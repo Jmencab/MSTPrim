@@ -17,21 +17,19 @@
 
 /* HEAP NAVIGATION */
 
-// TODO: Implement these as bitwise operators
-
 // parent of i
 int parent(int i) {
-	return i/2;
+	return i >> 1;
 }
 
 // left child of i
 int left(int i) {
-	return 2 * i;
+	return i << 1;
 }
 
 // right child of i
 int right(int i) {
-	return 2 * i + 1;
+	return (i << 1) | 1;
 }
 
 /* HELPER FUNCTIONS */
