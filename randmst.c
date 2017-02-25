@@ -57,7 +57,6 @@ lpoint* new_lpoint(void){
   //initialize distance
   l_pointer-> dist = 0;
   l_pointer->next_lpoint = NULL;
-  l_pointer->back_lpoint = NULL;
   l_pointer->vertex = -1;
   return l_pointer;
 }
@@ -141,7 +140,6 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                 assert(next_edge);
                 next_edge-> dist = distance;
                 next_edge->vertex = j;
-                next_edge->back_lpoint = head;
                 if(head){
                   head->next_lpoint = next_edge;
                 }
@@ -189,7 +187,7 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                   assert(next_edge);
                   next_edge-> dist = distance;
                   next_edge->vertex = j;
-                  next_edge->back_lpoint = head;
+            
                   if(head){
                     head->next_lpoint = next_edge;
                   }
@@ -245,7 +243,6 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                   assert(next_edge);
                   next_edge-> dist = distance;
                   next_edge->vertex = j;
-                  next_edge->back_lpoint = head;
                   if(head){
                     head->next_lpoint = next_edge;
                   }
@@ -285,7 +282,6 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
               assert(next_edge);
               next_edge->dist = wedge;
               next_edge->vertex = j;
-              next_edge->back_lpoint = head;
               if(head){
                 head->next_lpoint = next_edge;
               }

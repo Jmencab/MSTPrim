@@ -9,9 +9,7 @@
  *
  */
 
-int* prim(node* G, int size, int root) {
-	int dists[size];
-	int prev[size];
+void prim(node* G[], int size, int root, float dist[], int prev[]) {
 	int set[size];
 	heap* H = init_heap(size);
 	min_heap_insert(H, root, 0);
@@ -21,19 +19,25 @@ int* prim(node* G, int size, int root) {
 		set[i] = 0; // represents not in S
 	}
 	dist[root] = 0;
-	int v;
-	while (v = heap_extract_min(H), v != -1) {
-		set[v] = 1;
-		for (int i = 0; i < size; i++) {
-			// TODO: FOR EACH EDGE IN G[i]
-				if (set[w] == 0) {
-					if (dist[w] > LENGTHOFEDGE) {
-						dist[w] = LENGTHOFEDGE;
-						prev[w] = v;
-						min_heap_insert(H, w, dist[w]) // TODO: check for overflow (returns -1)
+	int v = heap_extract_min(H);
+	while (v != -1){
+		set[v] = 1;	
+			if(G[v]->first_l){
+			lpoint* head = G[v]->first_l;
+				while(head){
+					int w = head->vertex;
+					if(set[w] == 0){
+						if(dist[w] > head -> dist){
+							dist[w] = head -> dist;
+							prev[w] = v; 
+							min_heap_insert(H, w, dist[w]);
+						}
 					}
+					head = head->next_lpoint;
 				}
-		}
+			}
+		v = heap_extract_min(H);
 	}
-	destroy_heap(H); 
+	destroy_heap(H);
 }
+

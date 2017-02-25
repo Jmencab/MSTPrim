@@ -21,7 +21,7 @@
 
 // parent of i
 int parent(int i) {
-	return floor(i/2);
+	return i/2;
 }
 
 // left child of i

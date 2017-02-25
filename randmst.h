@@ -142,3 +142,8 @@ int heap_extract_min(heap* A);
  * Description: frees heap
  */
 void destroy_heap(heap* A);
+/***********************************************************
+***********************************************************/
+//Declarations for things in prims.c
+//runs the algorithm
+void prim(node* G[], int size, int root, float dist[], int prev[]);
