@@ -21,6 +21,17 @@ typedef struct node{
     lpoint* first_l;
 } node;
 
+//global array for determining pruning values 
+extern float prune_val[11][4];
+
+//global variable holding the pruning value
+extern float prune;
+
+/* float prune_lookup(int numpoints, int dimension)
+returns the pruning threshold for the given number of 
+numpoints and dimension you are running*/
+float prune_lookup(int numpoints, int dimension);
+
 /* void build_graph(int numpoints, int dimension)
 Sets the coordinates for numpoints nodes in a nodes array
  for a given dimension*/
@@ -67,6 +78,12 @@ void test_one(int numpoints, int dimension, node* nodes[], time_t t);
 void test_two(int numpoints, int dimension, node* nodes[], time_t t);
 //Test heap operations
 void test_three(void);
+//similar to test two, slightly different output
+void test_four(int numpoints, int dimension, node* nodes[], time_t t);
+//this test produces text output  we use to manually verify we are getting an MST
+void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, float dist[], int prev[]);
+//this test runs every dimension/numpoint combo needed in the writeup
+void test_six(time_t t);
 
 /* HEADER FOR HEAP.C */
 
