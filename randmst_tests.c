@@ -177,7 +177,7 @@ void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, 
 void test_six(time_t t){
 	float sum_avg = 0;
     float sum_instance = 0;
-  	for(int numpoints = 128; numpoints <= 512; numpoints = numpoints << 1){
+  	for(int numpoints = 128; numpoints <= 131072; numpoints = numpoints << 1){
   		node* nodes[numpoints];
   		float dist[numpoints];
   		int prev[numpoints];
