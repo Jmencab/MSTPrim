@@ -37,32 +37,29 @@ int prim(node* G[], int size, int root, float dist[], int prev[]) {
 	int v = heap_extract_min(H);
 	while (v != -1){ // while heap remains
 		set[v] = 1;	// add new vertex to set S
-			/* if any edge exists from this vertex */
-			if (G[v]->first_l) { 
+		
+			/* ensure all vertices have at least one edge */
+			assert(G[v]->first_l)
 
-				lpoint* head = G[v]->first_l;
+			lpoint* head = G[v]->first_l;
 
-				/* for each edge from vertex */
-				while (head) {
-					int w = head->vertex;
+			/* for each edge from vertex */
+			while (head) {
+				int w = head->vertex;
 
-					/* if edge leads to new vertex */
-					if (set[w] == 0) {
+				/* if edge leads to new vertex */
+				if (set[w] == 0) {
 
-						/* insert into heap if new distance smaller */
-						if (dist[w] > head->dist) {
-							dist[w] = head->dist;
-							prev[w] = v; 
-							min_heap_insert(H, w, dist[w]);
-						}
+					/* insert into heap if new distance smaller */
+					if (dist[w] > head->dist) {
+						dist[w] = head->dist;
+						prev[w] = v; 
+						min_heap_insert(H, w, dist[w]);
 					}
-					head = head->next_lpoint;
 				}
+				head = head->next_lpoint;
 			}
-			else {
-				/* Error: no edges for this vertex (bad pruning) */
-				return -1;
-			}
+
 		v = heap_extract_min(H);
 	}
 	destroy_heap(H);
