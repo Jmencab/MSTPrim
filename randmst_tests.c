@@ -183,7 +183,7 @@ void test_six(time_t t){
   		float dist[numpoints];
   		int prev[numpoints];
   		for(int dimension = 0; dimension < 5; dimension++){
-  			start = clock();
+  			double time;
   			if(dimension == 1){
 	  			continue;
 	  		}
@@ -193,7 +193,10 @@ void test_six(time_t t){
   				sum_instance = 0;
 	  			build_graph(numpoints, dimension, nodes, t);
 	  			list_builder(numpoints, dimension, nodes, t);
+	  			start = clock();
 	  			prim(nodes, numpoints, 0, dist, prev);
+	  			end = clock();
+	  			time += (double)(end - start) / CLOCKS_PER_SEC;
 	  			//free all of the list objects
 	  			for(int j = 0; j < numpoints; j++){
 		        	lpoint* head = NULL;
@@ -213,8 +216,8 @@ void test_six(time_t t){
 		    	sum_avg += sum_instance;
   			}
   			printf("%f %d %d %d\n", sum_avg/5, numpoints, 5, dimension);
-  			end = clock();
-  			printf("Time %f \n", (double)(end - start) / CLOCKS_PER_SEC);
+  			
+  			printf("Time %f \n", time / 5);
   		}
 	}
 }
