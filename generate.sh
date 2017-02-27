@@ -1,30 +1,16 @@
 #!/bin/sh
 
-for n in 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072
+for d in 0 2 3 4
 do
-	for n in 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072
-	do
-		
-	done
+	rm results/dim$d.txt
 done
 
-./randmst 0 128 5 0
-sleep 1
-./randmst 0 128 5 0
-sleep 1
-./randmst 0 128 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
-./randmst 0 16 5 0
-sleep 1
+for N in 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072
+do
+	for D in 0 2 3 4
+	do
+		echo $N $D
+		./randmst 0 $N 5 $D >> results/dim$D.txt
+		sleep 1
+	done
+done
