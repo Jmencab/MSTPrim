@@ -272,3 +272,12 @@ void test_eight(int numpoints, int dimension, int numtrials, node* nodes[], time
 	printf("Time %f \n", time / numtrials);
 }
 
+void test_nine(float x_1, float y_1, float x_2, float y_2){
+	double x_diff = (double) (x_2 - x_1);
+	double y_diff = (double) (y_2 -y_1);
+	double x_diff_square = pow(x_diff, 2);
+	double y_diff_square = pow(y_diff, 2);
+	float distance = (float) sqrt((x_diff_square + y_diff_square));
+	printf("The distance is %f\n", distance);
+}
+

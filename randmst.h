@@ -89,6 +89,8 @@ void test_six(time_t t);
 void test_seven(void);
 //case 0 with timing
 void test_eight(int numpoints, int dimension, int numtrials, node* nodes[], time_t t, int root, float dist[], int prev[]);
+//tests the distance calculations
+void test_nine(float x_1, float y_1, float x_2, float y_2)
 
 /* HEADER FOR HEAP.C */
 
