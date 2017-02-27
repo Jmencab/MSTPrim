@@ -190,15 +190,10 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
     //for all other cases, need to calculate edge weights based on coordinates
     case 2:
       for(int i = 0; i < numpoints; i++){
-        lpoint* head = NULL;
-
         float x_1 = nodes[i]-> coord[0];
         float y_1 = nodes[i]-> coord[1];
 
-        for(int j = 0; j < numpoints; j++){
-          if(j == i){
-            continue;
-          }
+        for(int j = i + 1; j < numpoints; j++){
           float x_2 = nodes[j]->coord[0];
           float y_2 = nodes[j]->coord[1];
           double x_diff = (double) (x_2 - x_1);
@@ -208,37 +203,35 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
           float distance = (float) sqrt((x_diff_square + y_diff_square));
           //use info to add to adjacency list
             if(distance <= prune){
+              lpoint* new_first = new_lpoint();
+              assert(new_first);
+              new_first->dist = distance;
+              new_first->vertex = j;
               if(nodes[i]->first_l){
-                lpoint* next_edge = new_lpoint();
-                assert(next_edge);
-                next_edge-> dist = distance;
-                next_edge->vertex = j;
-                if(head){
-                  head->next_lpoint = next_edge;
-                }
-                head = next_edge;
+                new_first->next_lpoint = nodes[i] ->first_l;
               }
-              if(!nodes[i]->first_l){
-                lpoint* first_edge = new_lpoint();
-                assert(first_edge);
-                first_edge-> dist = distance;
-                first_edge-> vertex = j;
-                nodes[i]-> first_l = first_edge;
-                head = first_edge;
+              nodes[i]->first_l = new_first;
+              //do the mirror image of this
+              lpoint* mirror_edge = new_lpoint();
+              assert(mirror_edge);
+              mirror_edge->dist = distance;
+              mirror_edge->vertex = i;
+              if(nodes[j]->first_l){
+                mirror_edge->next_lpoint = nodes[j] ->first_l;
               }
-          }
+              nodes[j]->first_l = mirror_edge;
+            }
         }
       }
     break;
 
     case 3: 
       for(int i = 0; i < numpoints; i++){
-          lpoint* head = NULL;
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
 
-          for(int j = 0; j < numpoints; j++){
+          for(int j = i + 1; j < numpoints; j++){
             if(j == i){
               continue;
             }
@@ -254,35 +247,32 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + z_diff_square));
             //use info to add to adjacency list
-              if(distance <= prune){
-                if(nodes[i]->first_l){
-                  lpoint* next_edge = new_lpoint();
-                  assert(next_edge);
-                  next_edge-> dist = distance;
-                  next_edge->vertex = j;
-            
-                  if(head){
-                    head->next_lpoint = next_edge;
-                  }
-                  head = next_edge;
-                }
-                if(!nodes[i]->first_l){
-                  lpoint* first_edge = new_lpoint();
-                  assert(first_edge);
-                  first_edge-> dist = distance;
-                  first_edge-> vertex = j;
-                  nodes[i]-> first_l = first_edge;
-                  head = first_edge;
-                }
+            if(distance <= prune){
+              lpoint* new_first = new_lpoint();
+              assert(new_first);
+              new_first->dist = distance;
+              new_first->vertex = j;
+              if(nodes[i]->first_l){
+                new_first->next_lpoint = nodes[i] ->first_l;
               }
+              nodes[i]->first_l = new_first;
+              //do the mirror image of this
+              lpoint* mirror_edge = new_lpoint();
+              assert(mirror_edge);
+              mirror_edge->dist = distance;
+              mirror_edge->vertex = i;
+              if(nodes[j]->first_l){
+                mirror_edge->next_lpoint = nodes[j] ->first_l;
+              }
+              nodes[j]->first_l = mirror_edge;
             }
           }
+      }
     
       break;
 
       case 4: 
       for(int i = 0; i < numpoints; i++){
-          lpoint* head = NULL;
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
@@ -290,10 +280,7 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
           //calculate euclidean distances and then 
           //take care of linked list
 
-          for(int j = 0; j < numpoints; j++){
-            if(j == i){
-              continue;
-            }
+          for(int j = i + 1; j < numpoints; j++){
             float x_2 = nodes[j]-> coord[0];
             float y_2 = nodes[j]-> coord[1];
             float z_2 = nodes[j]-> coord[2];
@@ -310,98 +297,55 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
               (float) sqrt((x_diff_square + y_diff_square + 
               z_diff_square + a_diff_square));
             //use info to add to adjacency list
-              if(distance <= prune){
-                if(nodes[i]->first_l){
-                  lpoint* next_edge = new_lpoint();
-                  assert(next_edge);
-                  next_edge-> dist = distance;
-                  next_edge->vertex = j;
-                  if(head){
-                    head->next_lpoint = next_edge;
-                  }
-                    head = next_edge;
-                  }
-                if(!nodes[i]->first_l){
-                  lpoint* first_edge = new_lpoint();
-                  assert(first_edge);
-                  first_edge-> dist = distance;
-                  first_edge-> vertex = j;
-                  nodes[i]-> first_l = first_edge;
-                  head = first_edge;
-                }
+            if(distance <= prune){
+              lpoint* new_first = new_lpoint();
+              assert(new_first);
+              new_first->dist = distance;
+              new_first->vertex = j;
+              if(nodes[i]->first_l){
+                new_first->next_lpoint = nodes[i] ->first_l;
               }
-
+              nodes[i]->first_l = new_first;
+              //do the mirror image of this
+              lpoint* mirror_edge = new_lpoint();
+              assert(mirror_edge);
+              mirror_edge->dist = distance;
+              mirror_edge->vertex = i;
+              if(nodes[j]->first_l){
+                mirror_edge->next_lpoint = nodes[j] ->first_l;
+              }
+              nodes[j]->first_l = mirror_edge;
+            }
           }
         }
       break;
-
   }
 }
 
 void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
+
+
   if(dimensions == 0){
-  //need to generate edge weights here individually
     for(int i = 0; i < numpoints; i++){
-      lpoint* head = NULL;
-
-        for(int j = i + 1; j < numpoints; j++){
+      for(int j = i + 1; j < numpoints; j++){
+        float wedge = rand_range(t, 1);
+        if(wedge <= prune){
+          lpoint* new_first = new_lpoint();
+          assert(new_first);
+          new_first->dist = wedge;
+          new_first->vertex = j;
           if(nodes[i]->first_l){
-            float wedge = rand_range(t, 1);
-            if(wedge <= prune){
-              lpoint* next_edge = new_lpoint();
-              assert(next_edge);
-              next_edge->dist = wedge;
-              next_edge->vertex = j;
-              if(head){
-                head->next_lpoint = next_edge;
-              }
-              head = next_edge;
-            }
+            new_first->next_lpoint = nodes[i]->first_l;
           }
-
-          if(!nodes[i]->first_l){
-            float wedge = rand_range(t, 1);
-            if(wedge <= prune){
-              lpoint* first_edge = new_lpoint();
-              assert(first_edge);
-              first_edge->dist = wedge;
-              first_edge->vertex = j;
-              nodes[i]->first_l = first_edge;
-              head = first_edge;
-            }
+          nodes[i]->first_l = new_first;
+          lpoint* mirror_edge = new_lpoint();
+          assert(new_lpoint);
+          mirror_edge->dist = wedge;
+          mirror_edge->vertex = i;
+          if(nodes[j]->first_l){
+           mirror_edge->next_lpoint = nodes[j]->first_l;
           }
-        }
-    }
-    //iterate back over nodes to make adjacency list symmetric
-    for(int back = 0; back < numpoints; back++){
-      for(int j = 0; j < back; j++){
-        lpoint * head = NULL;
-        if(nodes[j]->first_l){
-          head = nodes[j]->first_l;
-          while(head){
-            if(head->vertex == back){
-              //insert this edge to head of the list for nodes[back]
-              if(nodes[back] -> first_l){
-              lpoint* new_first_edge = new_lpoint();
-              assert(new_first_edge);
-              new_first_edge->dist = head->dist;
-              new_first_edge->vertex = j;
-              new_first_edge->next_lpoint = nodes[back]->first_l;
-              nodes[back] -> first_l = new_first_edge;
-              }
-              if(!nodes[back] -> first_l){
-                lpoint* first_edge= new_lpoint();
-                assert(first_edge);
-                first_edge->dist = head->dist;
-                first_edge->vertex = j;
-                nodes[back] -> first_l = first_edge;
-              }
-              break; //you fount the vertex you needed
-            }
-            else{
-              head = head->next_lpoint;
-            }
-          }
+          nodes[j]->first_l = mirror_edge;      
         }
       }
     }
