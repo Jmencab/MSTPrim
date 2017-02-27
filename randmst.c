@@ -81,6 +81,9 @@ int main(int argc, char** argv){
     case 6:
       test_six(t);
     break;
+    case 7:
+      test_seven();
+    break;
   }
 EXIT_SUCCESS;
 }

@@ -223,8 +223,13 @@ void test_six(time_t t){
 }
 
 /* Tests random number generator for bias */
-void test_seven(int i){
+void test_seven(void){
 	time_t t;
+	float sum = 0;
 	srand((unsigned) time(&t));
+	for(int i = 0; i < 10000; i++){
+		sum += rand_range(t, 1);
+	}
+	printf("Average is: %f", sum/10000);
 }
 

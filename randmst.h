@@ -85,6 +85,8 @@ void test_four(int numpoints, int dimension, node* nodes[], time_t t);
 void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, float dist[], int prev[]);
 //this test runs every dimension/numpoint combo needed in the writeup
 void test_six(time_t t);
+//tests random number generator for bias
+void test_seven(void);
 
 /* HEADER FOR HEAP.C */
 
