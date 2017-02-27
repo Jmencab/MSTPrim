@@ -50,7 +50,7 @@ void test_two(int numpoints, int dimension, node* nodes[], time_t t){
 				del_lpoint(temp);
 			}
 			if(nodes[i]){
-            	del_node(nodes[i]);
+							del_node(nodes[i]);
 			}
 		}
 		else{
@@ -97,36 +97,36 @@ void test_three(void){
 
 // Another test for generating the adjacency list 
 void test_four(int numpoints, int dimension, node* nodes[], time_t t){
-	  build_graph(numpoints, dimension, nodes, t);
-      printf("Built graph alright\n");
-      list_builder(numpoints, dimension, nodes, t);
-      printf("Built List alright\n");
-      for(int i = 0; i < numpoints; i++){
-        lpoint* head = NULL;
-        if(nodes[i]->first_l){
-          if(nodes[i]->first_l->next_lpoint){
-            head = nodes[i]->first_l->next_lpoint;
-          }
-          printf("Edge from V_%d to V_%d. Dist: %f\n", i, nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
-          while(head){
-            printf("Edge from V_%d to V_%d. Dist: %f\n", i, head->vertex, head->dist);
-            head = head->next_lpoint;
-          }
-          head = nodes[i]->first_l;
-          while(head){
-            lpoint* temp = head;
-            head = head->next_lpoint;
-            del_lpoint(temp);
-          }
-          del_node(nodes[i]);
-          printf("Deleted all the vertexes and the node itself for vertex %d\n", i);
-        }
-        else{
-          del_node(nodes[i]);
-        printf("No vertexes in adjacency list for vertex %d\n", i);
-        }
-      }
-      printf("All's well that ends well\n");
+		build_graph(numpoints, dimension, nodes, t);
+			printf("Built graph alright\n");
+			list_builder(numpoints, dimension, nodes, t);
+			printf("Built List alright\n");
+			for(int i = 0; i < numpoints; i++){
+				lpoint* head = NULL;
+				if(nodes[i]->first_l){
+					if(nodes[i]->first_l->next_lpoint){
+						head = nodes[i]->first_l->next_lpoint;
+					}
+					printf("Edge from V_%d to V_%d. Dist: %f\n", i, nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
+					while(head){
+						printf("Edge from V_%d to V_%d. Dist: %f\n", i, head->vertex, head->dist);
+						head = head->next_lpoint;
+					}
+					head = nodes[i]->first_l;
+					while(head){
+						lpoint* temp = head;
+						head = head->next_lpoint;
+						del_lpoint(temp);
+					}
+					del_node(nodes[i]);
+					printf("Deleted all the vertexes and the node itself for vertex %d\n", i);
+				}
+				else{
+					del_node(nodes[i]);
+				printf("No vertexes in adjacency list for vertex %d\n", i);
+				}
+			}
+			printf("All's well that ends well\n");
 }
 
 //generate output to manually ensure that an MST is generated
@@ -135,22 +135,22 @@ void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, 
 	printf("Built graph alright\n");
 	list_builder(numpoints, dimension, nodes, t);
 	printf("Built List alright\n");
-    for(int i = 0; i < numpoints; i++){
-	    lpoint* head = NULL;
-	    if(nodes[i]->first_l){
-	      if(nodes[i]->first_l->next_lpoint){
-	        head = nodes[i]->first_l->next_lpoint;
-	      }
-	      printf("Edge from V_%d to V_%d. Dist: %f\n", i, nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
-	      while(head){
-	        printf("Edge from V_%d to V_%d. Dist: %f\n", i, head->vertex, head->dist);
-	        head = head->next_lpoint;
-	      }
-	    }
-	    else{
-	    printf("No vertexes in adjacency list for vertex %d\n", i);
-	    }
-  	}
+		for(int i = 0; i < numpoints; i++){
+			lpoint* head = NULL;
+			if(nodes[i]->first_l){
+				if(nodes[i]->first_l->next_lpoint){
+					head = nodes[i]->first_l->next_lpoint;
+				}
+				printf("Edge from V_%d to V_%d. Dist: %f\n", i, nodes[i]->first_l->vertex, nodes[i]->first_l->dist);
+				while(head){
+					printf("Edge from V_%d to V_%d. Dist: %f\n", i, head->vertex, head->dist);
+					head = head->next_lpoint;
+				}
+			}
+			else{
+			printf("No vertexes in adjacency list for vertex %d\n", i);
+			}
+		}
 	prim(nodes, numpoints, root, dist, prev);
 	for(int i = 0; i < numpoints; i++){
 		printf("Edge from %d to %d\n", prev[i], i);
@@ -177,48 +177,48 @@ void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, 
 void test_six(time_t t){
 	clock_t start, end;
 	float sum_avg = 0;
-    float sum_instance = 0;
-  	for(int numpoints = 128; numpoints <= 131072; numpoints = numpoints << 1){
-  		node* nodes[numpoints];
-  		float dist[numpoints];
-  		int prev[numpoints];
-  		for(int dimension = 0; dimension < 5; dimension++){
-  			double time;
-  			if(dimension == 1){
-	  			continue;
-	  		}
-	  		prune = prune_lookup(numpoints, dimension);
-  			sum_avg = 0;
-  			for(int i = 0; i < 5; i++){
-  				sum_instance = 0;
-	  			build_graph(numpoints, dimension, nodes, t);
-	  			list_builder(numpoints, dimension, nodes, t);
-	  			start = clock();
-	  			prim(nodes, numpoints, 0, dist, prev);
-	  			end = clock();
-	  			time += (double)(end - start) / CLOCKS_PER_SEC;
-	  			//free all of the list objects
-	  			for(int j = 0; j < numpoints; j++){
-		        	lpoint* head = NULL;
-		          	if(nodes[j] ->first_l){
-		            	head = nodes[j] -> first_l;
-		            while(head){
-		              	lpoint* temp = head;
-		            	head = head->next_lpoint;
-		            	del_lpoint(temp);
-		            }
-		          }
-		          del_node(nodes[j]);
-		        }
-		     	for(int k = 0; k < numpoints; k++){
-		    		sum_instance += dist[k];
-		    	}
-		    	sum_avg += sum_instance;
-  			}
-  			printf("%f %d %d %d\n", sum_avg/5, numpoints, 5, dimension);
-  			
-  			printf("Time %f \n", time / 5);
-  		}
+		float sum_instance = 0;
+		for(int numpoints = 128; numpoints <= 131072; numpoints = numpoints << 1){
+			node* nodes[numpoints];
+			float dist[numpoints];
+			int prev[numpoints];
+			for(int dimension = 0; dimension < 5; dimension++){
+				double time;
+				if(dimension == 1){
+					continue;
+				}
+				prune = prune_lookup(numpoints, dimension);
+				sum_avg = 0;
+				for(int i = 0; i < 5; i++){
+					sum_instance = 0;
+					build_graph(numpoints, dimension, nodes, t);
+					list_builder(numpoints, dimension, nodes, t);
+					start = clock();
+					prim(nodes, numpoints, 0, dist, prev);
+					end = clock();
+					time += (double)(end - start) / CLOCKS_PER_SEC;
+					//free all of the list objects
+					for(int j = 0; j < numpoints; j++){
+							lpoint* head = NULL;
+								if(nodes[j] ->first_l){
+									head = nodes[j] -> first_l;
+								while(head){
+										lpoint* temp = head;
+									head = head->next_lpoint;
+									del_lpoint(temp);
+								}
+							}
+							del_node(nodes[j]);
+						}
+					for(int k = 0; k < numpoints; k++){
+						sum_instance += dist[k];
+					}
+					sum_avg += sum_instance;
+				}
+				printf("%f %d %d %d\n", sum_avg/5, numpoints, 5, dimension);
+				
+				printf("Time %f \n", time / 5);
+			}
 	}
 }
 
@@ -227,9 +227,48 @@ void test_seven(void){
 	time_t t;
 	float sum = 0;
 	srand((unsigned) time(&t));
-	for(int i = 0; i < 10000; i++){
-		sum += rand_range(t, 1);
+	for (int j = 0; j < 100; j++) {
+		sum = 0;
+		for(int i = 0; i < 10000; i++){
+			sum += rand_range(t, 1);
+		}
+		printf("Average is: %f\n", sum/10000);
 	}
-	printf("Average is: %f", sum/10000);
+	
+}
+
+void test_eight(int numpoints, int dimension, int numtrials, node* nodes[], time_t t, int root, float dist[], int prev[]){
+	clock_t start, end;
+	double time;
+	float sum_avg = 0;
+	float sum_instance;
+	for(int i = 0; i < numtrials; i++){
+		sum_instance = 0;
+		build_graph(numpoints, dimension, nodes, t);
+		list_builder(numpoints, dimension, nodes, t);
+		start = clock();
+		prim(nodes, numpoints, 0, dist, prev);
+		end = clock();
+		time += (double)(end - start) / CLOCKS_PER_SEC;
+		for(int j = 0; j < numpoints; j++){
+			lpoint* head = NULL;
+			if(nodes[j] ->first_l){
+				head = nodes[j] -> first_l;
+				while(head){
+					lpoint* temp = head;
+					 head = head->next_lpoint;
+					 del_lpoint(temp);
+				}
+			}
+			del_node(nodes[j]);
+		}
+		for(int k = 0; k < numpoints; k++){
+			sum_instance += dist[k];
+		}
+		sum_avg += sum_instance;
+	}
+	float average = sum_avg / numtrials;
+	printf("%f %d %d %d\n", average, numpoints, numtrials, dimension);
+	printf("Time %f \n", time / numtrials);
 }
 

@@ -87,6 +87,8 @@ void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, 
 void test_six(time_t t);
 //tests random number generator for bias
 void test_seven(void);
+//case 0 with timing
+void test_eight(int numpoints, int dimension, int numtrials, node* nodes[], time_t t, int root, float dist[], int prev[]);
 
 /* HEADER FOR HEAP.C */
 
