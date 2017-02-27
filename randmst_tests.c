@@ -221,6 +221,3 @@ void test_six(time_t t){
   		}
 	}
 }
-
-
-
