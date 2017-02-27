@@ -19,7 +19,7 @@
  * -1 : error
  *
  */
-void prim(node* G[], int size, int root, float dist[], int prev[]) {
+int prim(node* G[], int size, int root, float dist[], int prev[]) {
 	/* Initialize */
 	int set[size]; // set S of vertices in MST
 	heap* H = init_heap(size); // init heap
@@ -59,11 +59,12 @@ void prim(node* G[], int size, int root, float dist[], int prev[]) {
 					head = head->next_lpoint;
 				}
 			}
-			// else {
-				// TODO: IMPLEMENT ERROR HERE
-			// }
+			else {
+				return -1;
+			}
 		v = heap_extract_min(H);
 	}
 	destroy_heap(H);
+	return 0;
 }
 
