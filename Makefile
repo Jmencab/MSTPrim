@@ -12,4 +12,4 @@ graph.o: graph.c randmst.h
 	cc -c -ggdb graph.c
 
 clean :
-	rm randmst randmst.o randmst_tests.o heap.o prims.0 
+	rm randmst randmst.o randmst_tests.o heap.o prims.o

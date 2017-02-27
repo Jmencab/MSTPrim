@@ -185,6 +185,7 @@ void test_six(time_t t){
   			if(dimension == 1){
 	  			continue;
 	  		}
+	  		prune = prune_lookup(numpoints, dimension);
   			sum_avg = 0;
   			for(int i = 0; i < 5; i++){
   				sum_instance = 0;
