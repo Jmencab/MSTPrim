@@ -1,4 +1,6 @@
 
+#include "randmst.h"
+
 /* Want to be able to run ./randmst 0 numpoints numtrials dimension
 We ultimately want an adjacency list that gives the distance to another 
 node from one node along relevant edges. */
