@@ -175,6 +175,7 @@ void test_five(int numpoints, int dimension, node* nodes[], time_t t, int root, 
 }
 
 void test_six(time_t t){
+	clock_t start, end;
 	float sum_avg = 0;
     float sum_instance = 0;
   	for(int numpoints = 128; numpoints <= 131072; numpoints = numpoints << 1){
@@ -182,6 +183,7 @@ void test_six(time_t t){
   		float dist[numpoints];
   		int prev[numpoints];
   		for(int dimension = 0; dimension < 5; dimension++){
+  			start = clock();
   			if(dimension == 1){
 	  			continue;
 	  		}
@@ -211,6 +213,8 @@ void test_six(time_t t){
 		    	sum_avg += sum_instance;
   			}
   			printf("%f %d %d %d\n", sum_avg/5, numpoints, 5, dimension);
+  			end = clock();
+  			printf("Time %f \n", (double)(end - start) / CLOCKS_PER_SEC);
   		}
 	}
 }

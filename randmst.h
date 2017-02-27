@@ -4,6 +4,7 @@
 #include <time.h>
 #include <assert.h>
 #include <math.h>
+#include <time.h>
 /***********************************************************
 ***********************************************************/
 //Declarations for things in randmst.c
