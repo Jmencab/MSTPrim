@@ -221,3 +221,10 @@ void test_six(time_t t){
   		}
 	}
 }
+
+/* Tests random number generator for bias */
+void test_seven(int i){
+	time_t t;
+	srand((unsigned) time(&t));
+}
+

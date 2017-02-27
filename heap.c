@@ -5,7 +5,6 @@
  * Implementation of a binary heap in C
  * HUID: 40940510
  *
- *
  * USAGE SUMMARY: 
  * 
  * heap* H = init_heap(CAPACITY_OF_HEAP);
