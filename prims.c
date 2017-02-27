@@ -60,6 +60,7 @@ int prim(node* G[], int size, int root, float dist[], int prev[]) {
 				}
 			}
 			else {
+				/* Error: no edges for this vertex (bad pruning) */
 				return -1;
 			}
 		v = heap_extract_min(H);
