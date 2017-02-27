@@ -81,8 +81,13 @@ int main(int argc, char** argv){
     case 6:
       test_six(t);
     break;
+
     case 7:
       test_seven();
+    break;
+
+    case 8:
+      test_eight(numpoints, dimension, numtrials, nodes, t, 0, dist, prev);
     break;
   }
 EXIT_SUCCESS;

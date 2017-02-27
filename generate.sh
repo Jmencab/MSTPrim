@@ -10,7 +10,7 @@ do
 	for D in 0 2 3 4
 	do
 		echo $N $D
-		./randmst 0 $N 5 $D >> results/dim$D.txt
+		./randmst 8 $N 5 $D >> results/dim$D.txt
 		sleep 1
 	done
 done
