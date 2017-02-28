@@ -18,11 +18,15 @@ int main(int argc, char** argv){
     case 0:{
       float sum_avg = 0;
       float sum_instance;
+      //repeat for number of trials
       for(int i = 0; i < numtrials; i++){
         sum_instance = 0;
+        //building the graph
         build_graph(numpoints, dimension, nodes, t);
         list_builder(numpoints, dimension, nodes, t);
+        //Running prims to build MST
         prim(nodes, numpoints, 0, dist, prev);
+        //Freeing data
         for(int j = 0; j < numpoints; j++){
           lpoint* head = NULL;
           if(nodes[j] ->first_l){
@@ -35,11 +39,13 @@ int main(int argc, char** argv){
           }
           del_node(nodes[j]);
         }
+        //summing through distance array
         for(int k = 0; k < numpoints; k++){
           sum_instance += dist[k];
         }
         sum_avg += sum_instance;
       }
+      //reporting average at end of trials
       float average = sum_avg / numtrials;
       printf("%f %d %d %d\n", average, numpoints, numtrials, dimension);
     }

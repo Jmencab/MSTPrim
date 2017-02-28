@@ -89,6 +89,7 @@ float prune_lookup(int numpoints, int dimension){
   return prune;
 }
 
+//Used to generate random number
 float rand_range(time_t t, float limit){
   float divisor = RAND_MAX/(limit+1);
   float retval;
@@ -192,16 +193,21 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
     //for all other cases, need to calculate edge weights based on coordinates
     case 2:
       for(int i = 0; i < numpoints; i++){
+        //record 2d point1
         float x_1 = nodes[i]-> coord[0];
         float y_1 = nodes[i]-> coord[1];
 
         for(int j = i + 1; j < numpoints; j++){
+          //record 2d point2
           float x_2 = nodes[j]->coord[0];
           float y_2 = nodes[j]->coord[1];
+          //get difference
           double x_diff = (double) (x_2 - x_1);
           double y_diff = (double) (y_2 -y_1);
+          //square the difference
           double x_diff_square = pow(x_diff, 2);
           double y_diff_square = pow(y_diff, 2);
+          //square root of difference 
           float distance = (float) sqrt((x_diff_square + y_diff_square));
           //use info to add to adjacency list
             if(distance <= prune){
@@ -229,26 +235,28 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
 
     case 3: 
       for(int i = 0; i < numpoints; i++){
+          //Get point in 3d for first vertex
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
 
           for(int j = i + 1; j < numpoints; j++){
-            if(j == i){
-              continue;
-            }
+            //Get point in 3d for second vertex
             float x_2 = nodes[j]-> coord[0];
             float y_2 = nodes[j]-> coord[1];
             float z_2 = nodes[j]-> coord[2];
+            //get difference of the points
             double x_diff = (double) (x_2 - x_1);
             double y_diff = (double) (y_2 - y_1);
             double z_diff = (double) (z_2 - z_1);
+            //sqare differences
             double x_diff_square = pow(x_diff, 2);
             double y_diff_square = pow(y_diff, 2);
             double z_diff_square = pow(z_diff, 2);
+            //sum and square root
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + z_diff_square));
-            //use info to add to adjacency list
+            //use info to add to adjacency list i to j
             if(distance <= prune){
               lpoint* new_first = new_lpoint();
               assert(new_first);
@@ -258,7 +266,7 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                 new_first->next_lpoint = nodes[i] ->first_l;
               }
               nodes[i]->first_l = new_first;
-              //do the mirror image of this
+              //do the mirror image of this, from j to i
               lpoint* mirror_edge = new_lpoint();
               assert(mirror_edge);
               mirror_edge->dist = distance;
@@ -275,30 +283,36 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
 
       case 4: 
       for(int i = 0; i < numpoints; i++){
+          //record point in 4d space for node[i]
           float x_1 = nodes[i]-> coord[0];
           float y_1 = nodes[i]-> coord[1];
           float z_1 = nodes[i]-> coord[2];
           float a_1 = nodes[i]-> coord[3];
+
           //calculate euclidean distances and then 
           //take care of linked list
-
           for(int j = i + 1; j < numpoints; j++){
+            //record point in 4d for point 2
             float x_2 = nodes[j]-> coord[0];
             float y_2 = nodes[j]-> coord[1];
             float z_2 = nodes[j]-> coord[2];
             float a_2 = nodes[j]-> coord[3];
+            //get difference
             double x_diff = (double) (x_2 - x_1);
             double y_diff = (double) (y_2 - y_1);
             double z_diff = (double) (z_2 - z_1);
             double a_diff = (double) (a_2 - a_1);
+            //Square the difference 
             double x_diff_square = pow(x_diff, 2);
             double y_diff_square = pow(y_diff, 2);
             double z_diff_square = pow(z_diff, 2);
             double a_diff_square = pow(a_diff, 2);
+            //take squre root of the sum of the squared differences
             float distance = 
               (float) sqrt((x_diff_square + y_diff_square + 
               z_diff_square + a_diff_square));
-            //use info to add to adjacency list
+
+            //use info to add to head of adjacency list
             if(distance <= prune){
               lpoint* new_first = new_lpoint();
               assert(new_first);
@@ -308,7 +322,8 @@ void euclid(int numpoints, int dimensions, node* nodes[]){
                 new_first->next_lpoint = nodes[i] ->first_l;
               }
               nodes[i]->first_l = new_first;
-              //do the mirror image of this
+
+              //record "mirror image" of edge j to i
               lpoint* mirror_edge = new_lpoint();
               assert(mirror_edge);
               mirror_edge->dist = distance;
@@ -328,6 +343,8 @@ void list_builder(int numpoints, int dimensions, node* nodes[], time_t t){
 
 
   if(dimensions == 0){
+    //With zero case, generate random numbers from node i to j, j > i,
+    //points and then record the mirror edge from node j to i 
     for(int i = 0; i < numpoints; i++){
       for(int j = i + 1; j < numpoints; j++){
         float wedge = rand_range(t, 1);
