@@ -93,6 +93,32 @@ void test_three(void){
 	assert(heap_extract_min(H) == -1);
 	destroy_heap(H);
 	printf("successfully passed overflow error\n");
+
+	// EXTREME TEST YO
+	H = init_heap(10);
+	min_heap_insert(H, 6, 500);
+	min_heap_insert(H, 7, 1000.5);
+	min_heap_insert(H, 1, -50.5);
+	min_heap_insert(H, 0, -100.123);
+	min_heap_insert(H, 5, 20.5);
+	min_heap_insert(H, 8, 5000.1234);
+	min_heap_insert(H, 3, 0.01);
+	min_heap_insert(H, 4, 5.1234);
+	min_heap_insert(H, 2, 0.0);
+	min_heap_insert(H, 9, 12341234.12341234);
+	assert(heap_extract_min(H) == 0);
+	assert(heap_extract_min(H) == 1);
+	assert(heap_extract_min(H) == 2);
+	assert(heap_extract_min(H) == 3);
+	assert(heap_extract_min(H) == 4);
+	assert(heap_extract_min(H) == 5);
+	assert(heap_extract_min(H) == 6);
+	assert(heap_extract_min(H) == 7);
+	assert(heap_extract_min(H) == 8);
+	assert(heap_extract_min(H) == 9);
+	assert(heap_extract_min(H) == -1); // test empty heap
+	destroy_heap(H);
+	printf("successfully sorted a lot of stuff\n");
 }
 
 // Another test for generating the adjacency list 
