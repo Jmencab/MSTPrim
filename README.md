@@ -1,2 +1,1 @@
-# cs124-mst
-Programming Assignment 1 for CS 124
+Implementation of Prim's Algorithm to find minimum spanning trees
